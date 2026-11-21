@@ -15,13 +15,13 @@ $menu = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($titulo ?? 'Inicio') ?> · <?= e($cfg['app']['nombre']) ?></title>
+    <title><?= htmlspecialchars($titulo ?? 'Inicio') ?> · <?= htmlspecialchars($cfg['app']['nombre']) ?></title>
     <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
 <header class="topbar">
     <div class="topbar__inner">
-        <a class="brand" href="index.php"><span class="brand__dot"></span><?= e($cfg['app']['nombre']) ?></a>
+        <a class="brand" href="index.php"><span class="brand__dot"></span><?= htmlspecialchars($cfg['app']['nombre']) ?></a>
         <nav class="nav">
             <?php foreach ($menu as $clave => $texto): ?>
                 <a href="index.php?c=<?= $clave ?>" class="<?= $activo === $clave ? 'is-active' : '' ?>"><?= $texto ?></a>
@@ -31,5 +31,5 @@ $menu = [
 </header>
 <main class="container">
     <?php if ($flash): ?>
-        <div class="alert alert--<?= e($flash['tipo']) ?>" role="status"><?= e($flash['mensaje']) ?></div>
+        <div class="alert alert--<?= htmlspecialchars($flash['tipo']) ?>" role="status"><?= htmlspecialchars($flash['mensaje']) ?></div>
     <?php endif; ?>

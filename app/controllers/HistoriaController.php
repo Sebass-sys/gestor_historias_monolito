@@ -46,12 +46,12 @@ class HistoriaController extends Controller
 
     public function editar(): void
     {
-        $h = $this->modelo->buscar((int)($_GET['id'] ?? 0));
-        if (!$h) {
+        $historia = $this->modelo->buscar((int)($_GET['id'] ?? 0));
+        if (!$historia) {
             $this->flash('error', 'La historia no existe.');
             $this->redirect('historia');
         }
-        $this->formulario($h, [], 'actualizar', 'Editar historia');
+        $this->formulario($historia, [], 'actualizar', 'Editar historia');
     }
 
     public function actualizar(): void
@@ -79,8 +79,8 @@ class HistoriaController extends Controller
         try {
             $this->modelo->avanzar((int)$this->post('id'));
             $this->flash('ok', 'Estado de la historia actualizado.');
-        } catch (DomainException $e) {
-            $this->flash('error', $e->getMessage());
+        } catch (DomainException $excepcion) {
+            $this->flash('error', $excepcion->getMessage());
         }
         $this->redirect('historia');
     }
@@ -117,23 +117,23 @@ class HistoriaController extends Controller
         ];
     }
 
-    private function _validar(array $d): array
+    private function _validar(array $datos): array
     {
-        $e = [];
-        if (mb_strlen($d['titulo']) < 5)       { $e['titulo'] = 'El título debe tener al menos 5 caracteres.'; }
-        if (mb_strlen($d['descripcion']) < 10) { $e['descripcion'] = 'Describe la historia (mínimo 10 caracteres).'; }
-        if (mb_strlen($d['responsable']) < 2)  { $e['responsable'] = 'Indica el responsable.'; }
-        if (!in_array($d['prioridad'], Historia::PRIORIDADES, true)) { $e['prioridad'] = 'Selecciona una prioridad válida.'; }
-        if (!in_array($d['estado'], Historia::ESTADOS, true))        { $e['estado'] = 'Selecciona un estado válido.'; }
-        if (!in_array((int)$d['puntos'], Historia::PUNTOS, true))    { $e['puntos'] = 'Selecciona los puntos de la historia.'; }
+        $errores = [];
+        if (mb_strlen($datos['titulo']) < 5)       { $errores['titulo'] = 'El título debe tener al menos 5 caracteres.'; }
+        if (mb_strlen($datos['descripcion']) < 10) { $errores['descripcion'] = 'Describe la historia (mínimo 10 caracteres).'; }
+        if (mb_strlen($datos['responsable']) < 2)  { $errores['responsable'] = 'Indica el responsable.'; }
+        if (!in_array($datos['prioridad'], Historia::PRIORIDADES, true)) { $errores['prioridad'] = 'Selecciona una prioridad válida.'; }
+        if (!in_array($datos['estado'], Historia::ESTADOS, true))        { $errores['estado'] = 'Selecciona un estado válido.'; }
+        if (!in_array((int)$datos['puntos'], Historia::PUNTOS, true))    { $errores['puntos'] = 'Selecciona los puntos de la historia.'; }
 
-        $f = DateTime::createFromFormat('Y-m-d', $d['fecha_creacion']);
-        if (!$f || $f->format('Y-m-d') !== $d['fecha_creacion']) {
-            $e['fecha_creacion'] = 'Fecha inválida.';
+        $fecha = DateTime::createFromFormat('Y-m-d', $datos['fecha_creacion']);
+        if (!$fecha || $fecha->format('Y-m-d') !== $datos['fecha_creacion']) {
+            $errores['fecha_creacion'] = 'Fecha inválida.';
         }
-        if ((new Sprint())->buscar((int)$d['sprint_id']) === null) {
+        if ((new Sprint())->buscar((int)$datos['sprint_id']) === null) {
             $e['sprint_id'] = 'Selecciona un sprint.';
         }
-        return $e;
+        return $errores;
     }
 }

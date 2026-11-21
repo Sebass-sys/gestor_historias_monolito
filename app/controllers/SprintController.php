@@ -39,12 +39,12 @@ class SprintController extends Controller
 
     public function editar(): void
     {
-        $s = $this->modelo->buscar((int)($_GET['id'] ?? 0));
-        if (!$s) {
+        $sprint = $this->modelo->buscar((int)($_GET['id'] ?? 0));
+        if (!$sprint) {
             $this->flash('error', 'El sprint no existe.');
             $this->redirect('sprint');
         }
-        $this->formulario($s, [], 'actualizar', 'Editar sprint');
+        $this->formulario($sprint, [], 'actualizar', 'Editar sprint');
     }
 
     public function actualizar(): void
@@ -89,25 +89,25 @@ class SprintController extends Controller
         ];
     }
 
-    private function _validar(array $d): array
+    private function _validar(array $datos): array
     {
-        $e = [];
-        if (mb_strlen($d['nombre']) < 3) {
-            $e['nombre'] = 'El nombre debe tener al menos 3 caracteres.';
+        $errores = [];
+        if (mb_strlen($datos['nombre']) < 3) {
+            $errores['nombre'] = 'El nombre debe tener al menos 3 caracteres.';
         }
-        if (mb_strlen($d['objetivo']) > 255) {
-            $e['objetivo'] = 'El objetivo no puede superar 255 caracteres.';
+        if (mb_strlen($datos['objetivo']) > 255) {
+            $errores['objetivo'] = 'El objetivo no puede superar 255 caracteres.';
         }
-        $ini = DateTime::createFromFormat('Y-m-d', $d['fecha_inicio']);
-        $fin = DateTime::createFromFormat('Y-m-d', $d['fecha_fin']);
-        if (!$ini || $ini->format('Y-m-d') !== $d['fecha_inicio']) {
-            $e['fecha_inicio'] = 'Fecha de inicio inválida.';
+        $ini = DateTime::createFromFormat('Y-m-d', $datos['fecha_inicio']);
+        $fin = DateTime::createFromFormat('Y-m-d', $datos['fecha_fin']);
+        if (!$ini || $ini->format('Y-m-d') !== $datos['fecha_inicio']) {
+            $errores['fecha_inicio'] = 'Fecha de inicio inválida.';
         }
-        if (!$fin || $fin->format('Y-m-d') !== $d['fecha_fin']) {
-            $e['fecha_fin'] = 'Fecha de fin inválida.';
-        } elseif (!isset($e['fecha_inicio']) && $d['fecha_fin'] < $d['fecha_inicio']) {
-            $e['fecha_fin'] = 'La fecha de fin no puede ser anterior al inicio.';
+        if (!$fin || $fin->format('Y-m-d') !== $datos['fecha_fin']) {
+            $errores['fecha_fin'] = 'Fecha de fin inválida.';
+        } elseif (!isset($e['fecha_inicio']) && $datos['fecha_fin'] < $datos['fecha_inicio']) {
+            $errores['fecha_fin'] = 'La fecha de fin no puede ser anterior al inicio.';
         }
-        return $e;
+        return $errores;
     }
 }

@@ -9,7 +9,7 @@ class Historia extends Model
     public const PRIORIDADES = ['alta', 'media', 'baja'];
     public const PUNTOS      = [1, 2, 3, 5, 8, 13, 21]; // serie de Fibonacci usada en Scrum
 
-    /** Siguiente estado al pulsar el botón "avanzar". */
+  
     public const SIGUIENTE = ['nueva' => 'activa', 'activa' => 'finalizada', 'impedimento' => 'activa'];
 
     private const SELECT_BASE =

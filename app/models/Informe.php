@@ -1,8 +1,5 @@
 <?php
-/**
- * Modelo Informe: consultas agregadas para los reportes de avance.
- * Todas aceptan un sprint (0 = todos los sprints).
- */
+
 class Informe extends Model
 {
     private function filtro(int $sprintId): array
@@ -10,7 +7,7 @@ class Informe extends Model
         return $sprintId > 0 ? [' WHERE sprint_id = ?', [$sprintId]] : ['', []];
     }
 
-    /** Resumen: historias, puntos totales y puntos finalizados. */
+   
     public function resumen(int $sprintId = 0): array
     {
         [$where, $par] = $this->filtro($sprintId);
@@ -25,7 +22,7 @@ class Informe extends Model
         return $f;
     }
 
-    /** Historias y puntos por estado (incluye estados sin historias en 0). */
+   
     public function porEstado(int $sprintId = 0): array
     {
         [$where, $par] = $this->filtro($sprintId);
@@ -42,7 +39,7 @@ class Informe extends Model
         return $r;
     }
 
-    /** Carga de trabajo por responsable, con su detalle por estado. */
+
     public function porResponsable(int $sprintId = 0): array
     {
         [$where, $par] = $this->filtro($sprintId);

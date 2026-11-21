@@ -12,13 +12,13 @@ $etiquetaAvanzar = ['nueva' => 'Iniciar', 'activa' => 'Finalizar', 'impedimento'
         <select class="input" name="sprint" aria-label="Filtrar por sprint" data-autosubmit>
             <option value="0">Todos los sprints</option>
             <?php foreach ($sprints as $s): ?>
-                <option value="<?= (int)$s['id'] ?>" <?= $sprintId === (int)$s['id'] ? 'selected' : '' ?>><?= e($s['nombre']) ?></option>
+                <option value="<?= (int)$s['id'] ?>" <?= $sprintId === (int)$s['id'] ? 'selected' : '' ?>><?= htmlspecialchars($s['nombre']) ?></option>
             <?php endforeach; ?>
         </select>
         <select class="input" name="estado" aria-label="Filtrar por estado" data-autosubmit>
             <option value="">Todos los estados</option>
             <?php foreach (Historia::ESTADOS as $est): ?>
-                <option value="<?= e($est) ?>" <?= $estado === $est ? 'selected' : '' ?>><?= e(ucfirst($est)) ?></option>
+                <option value="<?= e($est) ?>" <?= $estado === $est ? 'selected' : '' ?>><?= htmlspecialchars(ucfirst($est)) ?></option>
             <?php endforeach; ?>
         </select>
         <input type="search" class="input input--search" placeholder="Buscar por título, responsable…"
@@ -33,12 +33,12 @@ $etiquetaAvanzar = ['nueva' => 'Iniciar', 'activa' => 'Finalizar', 'impedimento'
         <tbody>
         <?php foreach ($historias as $h): ?>
             <tr>
-                <td><strong><?= e($h['titulo']) ?></strong><br><span class="muted"><?= e(mb_strimwidth($h['descripcion'], 0, 70, '…')) ?></span></td>
+                <td><strong><?= e($h['titulo']) ?></strong><br><span class="muted"><?= htmlspecialchars(mb_strimwidth($h['descripcion'], 0, 70, '…')) ?></span></td>
                 <td><?= e($h['sprint']) ?></td>
                 <td><?= e($h['responsable']) ?></td>
-                <td><span class="badge badge--<?= e($h['prioridad']) ?>"><?= e($h['prioridad']) ?></span></td>
+                <td><span class="badge badge--<?= e($h['prioridad']) ?>"><?= htmlspecialchars($h['prioridad']) ?></span></td>
                 <td><?= (int)$h['puntos'] ?></td>
-                <td><span class="badge badge--<?= e($h['estado']) ?>"><?= e($h['estado']) ?></span></td>
+                <td><span class="badge badge--<?= e($h['estado']) ?>"><?= htmlspecialchars($h['estado']) ?></span></td>
                 <td class="right actions">
                     <?php if (isset($etiquetaAvanzar[$h['estado']])): ?>
                         <form method="post" action="index.php?c=historia&a=avanzar">
@@ -47,7 +47,7 @@ $etiquetaAvanzar = ['nueva' => 'Iniciar', 'activa' => 'Finalizar', 'impedimento'
                         </form>
                     <?php endif; ?>
                     <a class="btn btn--small btn--ghost" href="index.php?c=historia&a=editar&id=<?= (int)$h['id'] ?>">Editar</a>
-                    <form method="post" action="index.php?c=historia&a=eliminar" data-confirmar="¿Eliminar la historia «<?= e($h['titulo']) ?>»?">
+                    <form method="post" action="index.php?c=historia&a=eliminar" data-confirmar="¿Eliminar la historia «<?= htmlspecialchars($h['titulo']) ?>»?">
                         <input type="hidden" name="id" value="<?= (int)$h['id'] ?>">
                         <button class="btn btn--small btn--danger" type="submit">Eliminar</button>
                     </form>

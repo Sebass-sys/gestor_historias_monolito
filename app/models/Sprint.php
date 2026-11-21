@@ -1,10 +1,7 @@
 <?php
-/**
- * Modelo Sprint: acceso a datos de los sprints y sus métricas de avance.
- */
+ 
 class Sprint extends Model
 {
-    /** Sprints con sus métricas (historias, puntos y puntos finalizados). */
     public function conMetricas(): array
     {
         $sql = "SELECT s.*,
